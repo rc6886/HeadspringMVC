@@ -7,7 +7,7 @@ namespace HSMVC.Features.Conference.Validation
 {
     public class ConferenceAddCommandValidator : AbstractValidator<ConferenceAddCommand>
     {
-        public ConferenceAddCommandValidator()
+        public ConferenceAddCommandValidator(ConferenceValidatorHelper validatorHelper)
         {
             RuleFor(x => x.Name).NotEmpty().WithMessage(ConferenceValidatorHelper.RequiredMessage("Name"));
             RuleFor(x => x.StartDate)
@@ -22,7 +22,7 @@ namespace HSMVC.Features.Conference.Validation
             RuleFor(x => x.Cost).NotNull().WithMessage(ConferenceValidatorHelper.RequiredMessage("Cost"));
             RuleFor(x => x.AttendeeCount).NotNull().WithMessage(ConferenceValidatorHelper.RequiredMessage("Attendee Count"));
 
-            Custom(conference => ConferenceValidatorHelper.DoesConferenceNameAlreadyExist(null, conference.Name)
+            Custom(conference => validatorHelper.DoesConferenceNameAlreadyExist(null, conference.Name)
                 ? new ValidationFailure("Name", $"The conference {conference.Name} name already exists.")
                 : null);
         }

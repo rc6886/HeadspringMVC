@@ -6,6 +6,13 @@ namespace HSMVC.Features.Conference.Validation
 {
     public class ConferenceValidatorHelper
     {
+        private readonly IConferenceRepository _conferenceRepository;
+
+        public ConferenceValidatorHelper(IConferenceRepository conferenceRepository)
+        {
+            _conferenceRepository = conferenceRepository;
+        }
+
         public static string RequiredMessage(string propertyName)
         {
             return $"{propertyName} is a required field.";
@@ -21,13 +28,12 @@ namespace HSMVC.Features.Conference.Validation
             return !date.Equals(default(DateTime));
         }
 
-        public static bool DoesConferenceNameAlreadyExist(Guid? id, string nameToCheck)
+        public bool DoesConferenceNameAlreadyExist(Guid? id, string nameToCheck)
         {
             if (string.IsNullOrEmpty(nameToCheck))
                 return false;
 
-            var conference = ObjectFactory.GetInstance<IConferenceRepository>()
-                .FindByName(nameToCheck);
+            var conference = _conferenceRepository.FindByName(nameToCheck);
 
             if (conference == null) return false;
 

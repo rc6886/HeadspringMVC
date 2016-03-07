@@ -103,7 +103,7 @@ namespace HSMVC.Tests.Conference
                 }).ToList()
             };
 
-            var validator = new ConferenceEditCommandValidator();
+            var validator = new ConferenceEditCommandValidator(new ConferenceValidatorHelper(_repository));
             var validationResults = conferenceBulkEditCommand.Commands.Select(command => validator.Validate(command)).ToList();
             validationResults.Any(x => x.Errors.Count > 0).ShouldBeFalse();
         }
