@@ -1,0 +1,16 @@
+﻿body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+.form-group input {
+    width: 300px;
+}
+
+.btn {
+    margin-top: 6px;
+}

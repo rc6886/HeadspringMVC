@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet"/>
+    <link href="~/Content/site.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Static navbar -->
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">Conference Manager</a>
+                </div>
+            </div><!--/.container-fluid -->
+        </nav>
+
+        <!-- Main component for a primary marketing message or call to action -->
+        <div class="jumbotron">
+            <h1>Conference Manager 2.0</h1>
+            <p>This website is used to manage your conferences.</p>
+            <p>
+                <a class="btn btn-lg btn-primary" href="@Url.Action("Add", "Conference")" role="button">Add Conference &raquo;</a>
+            </p>
+        </div>
+        @RenderBody()
+    </div> <!-- /container -->
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-1.9.1.min.js"></script>
+</body>
+</html>

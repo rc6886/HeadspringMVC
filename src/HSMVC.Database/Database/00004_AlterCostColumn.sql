@@ -1,0 +1,2 @@
+ALTER TABLE dbo.Conference
+ALTER COLUMN Cost DECIMAL(18, 2);

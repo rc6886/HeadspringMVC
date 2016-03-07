@@ -1,0 +1,37 @@
+﻿@model IList<HSMVC.Domain.Conference>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Conference List</h1>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Hashtag</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Cost</th>
+        <th>Attendees</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for (var i = 0; i < Model.Count(); i++)
+    {
+        <tr>
+            <td>@Html.ActionLink(Model[i].Name, "Edit", new { id = Model[i].Id })</td>
+            <td>@Model[i].HashTag</td>
+            <td>@Model[i].StartDate.ToShortDateString()</td>
+            <td>@Model[i].EndDate.ToShortDateString()</td>
+            <td>@Model[i].Cost.ToString("C2")</td>
+            <td>@Model[i].AttendeeCount</td>
+        </tr>
+    }
+    </tbody>
+</table>    
+
+<div>
+    @Html.ActionLink("Edit All", "BulkEdit", null, new {@class = "btn btn-default"})
+</div>

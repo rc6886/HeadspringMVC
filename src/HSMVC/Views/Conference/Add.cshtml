@@ -1,0 +1,50 @@
+﻿@using HSMVC.Helpers.Button
+@model HSMVC.Features.Conference.Commands.ConferenceAddCommand
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Add Conference</h1>
+
+@using (Html.BeginForm())
+{
+    @RenderValidationErrors()
+
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.Name, new { placeholder = "Name", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.Hashtag, new { placeholder = "Hashtag", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.StartDate, new { placeholder = "Start Date", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.EndDate, new { placeholder = "End Date", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.Cost, new { placeholder = "Cost", @class = "form-control", @type = "number" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.AttendeeCount, new { placeholder = "Attendee Count", @class = "form-control", @type = "number" })
+    </div>
+
+    @Html.SaveButton()
+}
+@Html.CancelToConferenceIndexButton()
+
+@helper RenderValidationErrors()
+{
+    var hasValidationErrors = ViewData.ModelState.Values.Any(x => x.Errors.Any());
+    if (hasValidationErrors)
+    {
+        <div class="alert alert-danger">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors).ToArray())
+            {
+                <div>@error.ErrorMessage</div>
+            }
+        </div>
+    }
+}

@@ -1,0 +1,11 @@
+*.suo
+bin
+obj
+build
+package
+Publish
+src/packages
+*.DotSettings.user
+*.csproj.user
+TestResult.xml
+src/CommonAssemblyInfo.cs
