@@ -8,7 +8,7 @@ $sln = "$src\HSMVC.sln"
 
 $test_results = "$basedir\TestResults"
 
-$database_instance = ".\sqlexpress"
+$database_instance = if ($env:DatabaseInstance) { $env:DatabaseInstance } else { ".\sqlexpress" }
 $database_name = "Conference"
 $scripts_path = "$src\HSMVC.Database\Database\HSMVC"
 
