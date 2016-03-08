@@ -70,11 +70,7 @@ task Compile -depends ConnectionStrings, AssemblyInfo {
   exec { msbuild /t:clean /v:q /nologo /p:Configuration=$configuration $src\$name.sln }
   exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src\packages" '/p:NoWarn="219,168,649"'}
   
-  if (Test-Path "$src\packages\HSMVC.$version.nupkg") {
-    Write-Host "Deployment NuGet Package Exists"
-  } else {
-    Write-Host "Deploy NuGet Package Does Not Exist"
-  }
+  Get-ChildItem "$src\packages"
   
   if ($env:APPVEYOR -eq "True") {
         Write-Host "Pushing Artifact from $src\packages\HSMVC.$version.nupkg..."
