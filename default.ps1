@@ -69,6 +69,10 @@ task Compile -depends ConnectionStrings, AssemblyInfo {
 
   exec { msbuild /t:clean /v:q /nologo /p:Configuration=$configuration $src\$name.sln }
   exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src\packages" '/p:NoWarn="219,168,649"'}
+  
+  if ($env:APPVEYOR -eq "True") {
+        appveyor PushArtifact "$src\packages\HSMVC$version.nupkg" -Type WebDeployPackage
+    }
 }
 
 #######################
