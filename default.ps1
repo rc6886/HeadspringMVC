@@ -13,7 +13,7 @@ properties {
         $dev_connection_string = $null
         $test_connection_string = $env:ConnectionString
     } else {
-        $version = "0.0.0.0"
+        $version = "1.0.32"
         $dev_connection_string = get-connection-string "$src\HSMVC\Web.config" "ConferenceDb"
         $test_connection_string = get-connection-string "$src\HSMVC.Tests\App.config" "ConferenceDb"
     }
@@ -71,6 +71,8 @@ task Compile -depends ConnectionStrings, AssemblyInfo {
   exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src\packages" '/p:NoWarn="219,168,649"'}
   
   if ($env:APPVEYOR -eq "True") {
+        Write-Host "Pushing Artifact from $src\packages\HSMVC.$version.nupkg..."
+  
         appveyor PushArtifact "$src\packages\HSMVC.$version.nupkg" -Type WebDeployPackage
     }
 }
