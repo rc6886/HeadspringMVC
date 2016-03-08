@@ -68,7 +68,7 @@ task Compile -depends ConnectionStrings, AssemblyInfo {
   #     CS0649 - Field '...' is never assigned to, and will always have its default value null
 
   exec { msbuild /t:clean /v:q /nologo /p:Configuration=$configuration $src\$name.sln }
-  exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln '/p:NoWarn="219,168,649"'}
+  exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src\packages" '/p:NoWarn="219,168,649"'}
 }
 
 #######################
