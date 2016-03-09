@@ -1,0 +1,22 @@
+version: 1.0.{build}
+environment:
+  ConnectionString: Data Source=.\SQL2014;Initial Catalog=Conference;Integrated Security=True
+services: mssql2014
+build_script:
+- cmd: build ci
+test: off
+artifacts:
+- path: src\packages\deploy.zip
+  name: Website
+deploy:
+- provider: WebDeploy
+  server: https://headspringmvc.scm.azurewebsites.net:443/msdeploy.axd?site=HeadspringMVC
+  website: HeadspringMVC
+  username: $HeadspringMVC
+  password:
+    secure: 3/mXBrqZ7lgzKwfSAKz360wG0Vlk5wfkUjMjQT4xPJIbwJg8EyBoxPpnQtge7LnUGmFbeiHsHwwjRnoE85nMWQ==
+  artifact: Website
+  skip_dirs: 
+  skip_files: 
+  on:
+    branch: master
