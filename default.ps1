@@ -66,17 +66,16 @@ task Compile -depends ConnectionStrings, AssemblyInfo {
   #     CS0219 - The variable '...' is assigned but its value is never used
   #     CS0168 - The variable '...' is declared but never used
   #     CS0649 - Field '...' is never assigned to, and will always have its default value null
-
+  
   exec { msbuild /t:clean /v:q /nologo /p:Configuration=$configuration $src\$name.sln }
-  exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src\packages" '/p:NoWarn="219,168,649"'}
   
-  Get-ChildItem "$src\packages"
-  
-  if ($env:APPVEYOR -eq "True") {
-        Write-Host "Pushing Artifact from $src\packages\HSMVC.$version.nupkg..."
-  
-        appveyor PushArtifact "$src\packages\HSMVC.$version.nupkg" -Type WebDeployPackage
-    }
+  if ($env:APPVEYOR_REPO_BRANCH -eq "master") {
+    exec { msbuild /t:build /v:q /nolog /p:Configuration=$configuration $src\$name.sln /t:Package /p:PackageLocation="$src\deploy.zip" /p:PackageAsSingleFile=True '/p:NoWarn="219,168,649"' }
+    
+    appveyor PushArtifact "$src\deploy.zip" -Type WebDeployPackage
+  } else {
+    exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src\packages" '/p:NoWarn="219,168,649"'}
+  }
 }
 
 #######################
