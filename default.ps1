@@ -150,7 +150,7 @@ task ConnectionStrings {
     foreach ($configFile in @(gci $src -rec -filter App.config)) {
         Write-Host $configFile.FullName $test_connection_string
         Write-Host "AppVeyor Env $env:APPVEYOR"
-        set-connection-string $configFile.FullName "ConnectionString" $test_connection_string
+        set-connection-string $configFile.FullName "ConferenceDb" $test_connection_string
     }
 }
 
