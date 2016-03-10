@@ -70,6 +70,10 @@ task Compile -depends ConnectionStrings, AssemblyInfo {
   
   exec { msbuild /t:clean /v:q /nologo /p:Configuration=$configuration $src\$name.sln }
   
+  Write-Host $env:ConnectionString
+  Write-Host $test_connection_string
+  Write-Host exec { get-connection-string "$src\HSMVC.Tests\App.config" "ConferenceDb" }
+ 
   if ($env:APPVEYOR_REPO_BRANCH -eq "master") {
     exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src" '/p:NoWarn="219,168,649"'}
     Rename-Item "$src\HSMVC.$version.nupkg" "deploy.zip"
@@ -144,6 +148,8 @@ function deploy-database($action, $connection_string, $env) {
 
 task ConnectionStrings {
     foreach ($configFile in @(gci $src -rec -filter App.config)) {
+        Write-Host $configFile.FullName $test_connection_string
+        Write-Host "AppVeyor Env $env:APPVEYOR"
         set-connection-string $configFile.FullName "ConferenceDb" $test_connection_string
     }
 }
