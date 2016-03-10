@@ -1,4 +1,4 @@
-https://ci.appveyor.com/api/projects/status/dh85yhl4yi4gugp2?svg=true
+<img src="https://ci.appveyor.com/api/projects/status/dh85yhl4yi4gugp2?svg=true"></img>
 
 ## Headspring MVC ##
 
