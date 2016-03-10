@@ -25,6 +25,7 @@ properties {
     $roundhouse_exe_path = "$roundhouse_dir\rh.exe"
     $db_scripts_dir ="$src\HSMVC.Database\Database\HSMVC"
     $roundhouse_version_file = "$src\HSMVC\bin\HSMVC.dll"
+    $azureDeployConnectionString = "Server=tcp:rc6886devdb.database.windows.net,1433;Database=Conference;User ID=rc6886devdb@rc6886devdb;Password=?riMDA,ZMa8A4PrgdxLEK3>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 }
 
 task default -depends Compile, RebuildDevDatabase, RebuildTestDatabase, Test
@@ -68,15 +69,13 @@ task Compile -depends ConnectionStrings, AssemblyInfo {
   #     CS0649 - Field '...' is never assigned to, and will always have its default value null
   
   exec { msbuild /t:clean /v:q /nologo /p:Configuration=$configuration $src\$name.sln }
-  #exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln '/p:NoWarn="219,168,649"' }
-  #exec { msbuild "$src\HSMVC\HSMVC.csproj" /v:q /nologo /t:Package /p:PackageLocation="$src\deploy.zip" /p:PackageAsSingleFile=True '/p:NoWarn="219,168,649"' }
-  
+ 
   if ($env:APPVEYOR_REPO_BRANCH -eq "master") {
-    exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src\packages" '/p:NoWarn="219,168,649"'}
-    Rename-Item "$src\packages\HSMVC.$version.nupkg" "deploy.zip"
-    appveyor PushArtifact "$src\packages\deploy.zip" -Type WebDeployPackage
+    exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src" '/p:NoWarn="219,168,649"'}
+    Rename-Item "$src\HSMVC.$version.nupkg" "deploy.zip"
+    appveyor PushArtifact "$src\deploy.zip" -Type WebDeployPackage
   } else {
-    exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src\packages" '/p:NoWarn="219,168,649"'}
+    exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src" '/p:NoWarn="219,168,649"'}
   }
 }
 
@@ -98,6 +97,10 @@ task UpdateDevDatabase {
 
 task UpdateTestDatabase {
     deploy-database "Update" $test_connection_string "TEST"
+}
+
+task DeployAzureDB {
+    deploy-database "Update" $azureDeployConnectionString "PROD"
 }
 
 function deploy-database($action, $connection_string, $env) {
