@@ -1,3 +1,5 @@
+https://ci.appveyor.com/api/projects/status/dh85yhl4yi4gugp2?svg=true
+
 ## Headspring MVC ##
 
 This is my implementation for the Headspring University MVC homework.
