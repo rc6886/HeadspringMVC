@@ -1,6 +1,6 @@
 version: 1.0.{build}
 environment:
-  ConnectionString: Data Source=.\SQL2014;Initial Catalog=Conference;Integrated Security=True
+  ConnectionString: Server=.\SQL2014;Database=HeadStart-Test;User Id=sa;Password=Password12!
 services: mssql2014
 build_script:
 - cmd: build ci
