@@ -71,9 +71,8 @@ task Compile -depends ConnectionStrings, AssemblyInfo {
   exec { msbuild /t:clean /v:q /nologo /p:Configuration=$configuration $src\$name.sln }
  
   if ($env:APPVEYOR_REPO_BRANCH -eq "master") {
-    exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src" '/p:NoWarn="219,168,649"'}
     set-connection-string "$src\HSMVC\Web.config" "ConferenceDb" $azureDeployConnectionString
-    Write-Host exec { get-connection-string "$src\HSMVC\Web.config" "ConferenceDb" }
+    exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src" '/p:NoWarn="219,168,649"'}
     Rename-Item "$src\HSMVC.$version.nupkg" "deploy.zip"
     #appveyor PushArtifact "$src\deploy.zip" -Type WebDeployPackage
   } else {
