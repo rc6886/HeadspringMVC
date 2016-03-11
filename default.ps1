@@ -69,10 +69,6 @@ task Compile -depends ConnectionStrings, AssemblyInfo {
   #     CS0649 - Field '...' is never assigned to, and will always have its default value null
   
   exec { msbuild /t:clean /v:q /nologo /p:Configuration=$configuration $src\$name.sln }
-  
-  Write-Host $env:ConnectionString
-  Write-Host $test_connection_string
-  Write-Host exec { get-connection-string "$src\HSMVC.Tests\App.config" "ConferenceDb" }
  
   if ($env:APPVEYOR_REPO_BRANCH -eq "master") {
     exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src" '/p:NoWarn="219,168,649"'}
