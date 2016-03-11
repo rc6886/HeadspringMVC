@@ -72,6 +72,7 @@ task Compile -depends ConnectionStrings, AssemblyInfo {
  
   if ($env:APPVEYOR_REPO_BRANCH -eq "master") {
     exec { msbuild /t:build /v:q /nologo /p:Configuration=$configuration $src\$name.sln /p:RunOctoPack=true /p:OctoPackPackageVersion=$version /p:OctoPackPublishPackageToFileShare="$src" '/p:NoWarn="219,168,649"'}
+    set-connection-string "$src\HSMVC\Web.config" "ConferenceDb" $azureDeployConnectionString
     Rename-Item "$src\HSMVC.$version.nupkg" "deploy.zip"
     appveyor PushArtifact "$src\deploy.zip" -Type WebDeployPackage
   } else {
@@ -144,8 +145,6 @@ function deploy-database($action, $connection_string, $env) {
 
 task ConnectionStrings {
     foreach ($configFile in @(gci $src -rec -filter App.config)) {
-        Write-Host $configFile.FullName $test_connection_string
-        Write-Host "AppVeyor Env $env:APPVEYOR"
         set-connection-string $configFile.FullName "ConferenceDb" $test_connection_string
     }
 }
